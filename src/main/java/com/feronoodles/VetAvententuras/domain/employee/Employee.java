@@ -20,7 +20,6 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employee_id;
-
     private String first_name;
     private String last_name;
     private double salary;
