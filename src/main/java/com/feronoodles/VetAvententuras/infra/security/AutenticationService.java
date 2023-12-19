@@ -65,9 +65,13 @@ public class AutenticationService  {
                 .employee(employee)
                 .build();
 
+        String token=jwtService.getToken(user);
+
         usersRepository.save(user);
 
-        DatosJWTToken datosJWTToken = new DatosJWTToken(jwtService.getToken(user));
+        saveUserToken(user,token);
+
+        DatosJWTToken datosJWTToken = new DatosJWTToken(token);
         return datosJWTToken;
     }
     public DatosRefreshJWTToken refreshToken(RefreshTokenRequest refreshTokenRequest){
@@ -76,8 +80,9 @@ public class AutenticationService  {
 
         if(jwtService.isTokenValid(refreshTokenRequest.getToken(),user))
         {
-            var jwt = jwtService.getToken(user);
-
+            String jwt = jwtService.getToken(user);
+            revokeAllUserTokens(user);
+            saveUserToken(user,jwt);
             DatosRefreshJWTToken datosRefreshJWTToken = new DatosRefreshJWTToken(jwt,refreshTokenRequest.getToken());
             return  datosRefreshJWTToken;
         }
