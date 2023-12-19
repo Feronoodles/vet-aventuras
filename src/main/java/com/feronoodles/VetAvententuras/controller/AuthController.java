@@ -3,9 +3,9 @@ package com.feronoodles.VetAvententuras.controller;
 
 import com.feronoodles.VetAvententuras.domain.employee.dto.EmployeeRegisterDTO;
 import com.feronoodles.VetAvententuras.domain.employee.dto.LoginRequest;
+import com.feronoodles.VetAvententuras.domain.token.dto.RefreshTokenRequest;
 import com.feronoodles.VetAvententuras.infra.security.AutenticationService;
 
-import com.feronoodles.VetAvententuras.infra.security.DatosJWTToken;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +29,12 @@ public class AuthController {
     public ResponseEntity register(@RequestBody @Valid EmployeeRegisterDTO request)
     {
         return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping(value = "refresh")
+    public ResponseEntity refreshToken(@RequestBody @Valid RefreshTokenRequest request)
+    {
+        return ResponseEntity.ok(authService.refreshToken(request));
     }
 
 

@@ -1,6 +1,5 @@
 package com.feronoodles.VetAvententuras.infra.security;
 
-import com.feronoodles.VetAvententuras.domain.users.UsersRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
