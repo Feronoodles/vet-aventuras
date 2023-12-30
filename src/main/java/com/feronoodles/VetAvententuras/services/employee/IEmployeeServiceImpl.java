@@ -35,7 +35,7 @@ public class IEmployeeServiceImpl implements IEmployeeService{
 
         Users user = Users.builder()
                 .email(employeedto.email())
-                .password(passwordEncoder.encode( employeedto.password()))
+                .password(passwordEncoder.encode(employeedto.password()))
                 .role(Roles.VET)
                 .created_at(LocalDateTime.now())
                 .employee(employee)

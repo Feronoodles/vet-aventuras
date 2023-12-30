@@ -39,6 +39,7 @@ public class AutenticationService  {
     {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
         Users user=usersRepository.findByEmail(request.email()).orElseThrow();
+
         String token=jwtService.getToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user,token);

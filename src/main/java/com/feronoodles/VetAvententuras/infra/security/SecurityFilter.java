@@ -40,12 +40,14 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         username=tokenService.getUsernameFromToken(token);
 
+
         if (username!=null && SecurityContextHolder.getContext().getAuthentication()==null)
         {
             UserDetails userDetails=userDetailsService.loadUserByUsername(username);
-
+            System.out.println("username "+userDetails.getAuthorities());
             if (tokenService.isTokenValid(token, userDetails))
             {
+                System.out.println("toke valido");
                 UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
