@@ -9,12 +9,12 @@ import com.feronoodles.VetAvententuras.services.employee.IEmployeeService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/employee")
@@ -30,5 +30,11 @@ public class EmployeeController {
         Users employee = iEmployeeService.addVetEmployee(employeeRegisterDTO);
         EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO(employee);
         return ResponseEntity.ok(employeeRequestDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<EmployeeRequestDTO>> findAllEmployees(@PageableDefault(size = 10)Pageable page)
+    {
+        return ResponseEntity.ok(iEmployeeService.findAll(page));
     }
 }
