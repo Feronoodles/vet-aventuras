@@ -1,5 +1,6 @@
 package com.feronoodles.VetAvententuras.infra.security;
 
+import com.feronoodles.VetAvententuras.domain.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private TokenService tokenService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
 
     @Override
@@ -44,10 +46,13 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (username!=null && SecurityContextHolder.getContext().getAuthentication()==null)
         {
             UserDetails userDetails=userDetailsService.loadUserByUsername(username);
-            System.out.println("username "+userDetails.getAuthorities());
-            if (tokenService.isTokenValid(token, userDetails))
+            // validamos que no se authorize un token revokado o expirado
+            var isTokenValid = tokenRepository.findByToken(token)
+                    .map(t -> !t.isExpired() && !t.isRevoked())
+                    .orElse(false);
+            if (tokenService.isTokenValid(token, userDetails) && isTokenValid)
             {
-                System.out.println("toke valido");
+
                 UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
